@@ -19,6 +19,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("readlines: %s", err)
 	}
+	//1121
 	num := countDepthIncreases(depths)
 	fmt.Println("countDepthIncreases:", num)
 
