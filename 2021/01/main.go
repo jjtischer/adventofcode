@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -9,13 +10,19 @@ import (
 	//"io"
 )
 
+var (
+	inputFile = flag.String("f", "input.txt","test input")
+)
+
 const (
 	slidingWindowSize = 3
 )
 
 func main() {
-
-	depths, err := readFile("input.txt")
+	flag.Parse()
+	fmt.Println("processing file: ",string(*inputFile))
+	filename := string(*inputFile)
+	depths, err := readFile(filename)
 	if err != nil {
 		log.Fatalf("readlines: %s", err)
 	}
