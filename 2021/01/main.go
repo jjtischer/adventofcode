@@ -9,6 +9,10 @@ import (
 	//"io"
 )
 
+const (
+	slidingWindowSize = 3
+)
+
 func main() {
 
 	depths, err := readFile("input.txt")
@@ -18,6 +22,7 @@ func main() {
 	num := countDepthIncreases(depths)
 	fmt.Println("countDepthIncreases:", num)
 
+	//1065
 	num = slidingWindowIncreases(depths)
 	fmt.Println("slidingWindowIncreases:", num)
 }
@@ -47,30 +52,18 @@ func sum(s []int) int{
 }
 
 func slidingWindowIncreases(depths []int) int{
-	windows := make(map[int]int)
 	num := 0
-	count :=0
 	prevWindowTotal := 0
-
 	for i, _ := range depths{
-		if( (i+3) < len(depths)){
-			s := depths[i:i+3]
+		if( (i+slidingWindowSize) < len(depths)){
+			s := depths[i:i+slidingWindowSize]
 			totalWindow := sum(s)
-			windows[count] = totalWindow
-			if(i == 0){
-				fmt.Printf("window:%s total:%d (NA) \n", s, totalWindow)
-			}
 			if(totalWindow > prevWindowTotal){
 				num ++
-				fmt.Printf("window:%s total:%d increased ++ \n", s, totalWindow)
-			} else {
-				fmt.Printf("window:%s total:%d decreased \n", s, totalWindow)
 			}
-
 			prevWindowTotal = totalWindow
 		}
 	}
-	fmt.Println(windows)
 	return num
 }
 
