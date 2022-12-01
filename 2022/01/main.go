@@ -1,20 +1,20 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"os"
-	"bufio"
 	"sort"
 	"strconv"
 )
 
 var (
-	inputFile = flag.String("f", "input.txt","test input")
+	inputFile = flag.String("f", "input.txt", "test input")
 )
 
 type elf struct {
-	food []int
+	food  []int
 	total int
 }
 
@@ -25,15 +25,15 @@ type elf struct {
 
 func main() {
 	flag.Parse()
-	fmt.Println("Processing file:",string(*inputFile))
+	fmt.Println("Processing file:", string(*inputFile))
 	var lines []string
 	lines, err := readInputFile(*inputFile)
 	if err != nil {
 		fmt.Println(err)
 	}
 	elves := []elf{}
-	elves,err = parseElves(lines)
-	if err != nil{
+	elves, err = parseElves(lines)
+	if err != nil {
 		fmt.Println(err)
 	}
 
@@ -41,9 +41,9 @@ func main() {
 	printElfTop3(elves)
 }
 
-func readInputFile(filename string) ([]string,error) {
+func readInputFile(filename string) ([]string, error) {
 	readFile, err := os.Open(filename)
- 	var lines []string
+	var lines []string
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -51,70 +51,70 @@ func readInputFile(filename string) ([]string,error) {
 	fileScanner.Split(bufio.ScanLines)
 	for fileScanner.Scan() {
 		currentLine := fileScanner.Text()
-		lines = append(lines,currentLine)
+		lines = append(lines, currentLine)
 	}
 	readFile.Close()
 	return lines, nil
 }
 
-func sumArray(array []int) int{
-	result :=0
-	for _, v := range array{
+func sumArray(array []int) int {
+	result := 0
+	for _, v := range array {
 		result += v
 	}
 	return result
 }
 
-func newElf() *elf{
+func newElf() *elf {
 	e := elf{}
 	return &e
 }
 
-func parseElves(lines []string)([]elf, error){
+func parseElves(lines []string) ([]elf, error) {
 	elves := []elf{}
 	e := newElf()
-	for _,currentLine := range lines{
-		if currentLine == ""{
-			elves = append(elves,*e)
+	for i, currentLine := range lines {
+		if currentLine == "" {
+			elves = append(elves, *e)
 			e = newElf()
-		} else {
-			n , err := strconv.Atoi(currentLine)
-			if err != nil{
+			continue
+		}
+
+		if currentLine != "" {
+			n, err := strconv.Atoi(currentLine)
+			if err != nil {
 				fmt.Println(err)
 			}
 			e.food = append(e.food, n)
 			//could move to find max
 			e.total = sumArray(e.food)
 		}
+
+		if i == (len(lines)-1){
+			elves = append(elves, *e)
+		}
 	}
 
-	sort.Slice(elves, func( i, j int) bool {
+	sort.Slice(elves, func(i, j int) bool {
 		return elves[i].total < elves[j].total
 	})
 	return elves, nil
 }
 
-func printElfMax(elves []elf){
-	//find elf with max calories
-	max := 0
-	for _, e := range elves{
-	if max < e.total {
-	max = e.total
-	}
-	//fmt.Println(e.total)
-	}
+func printElfMax(elves []elf) {
+	max := elves[len(elves)-1].total
 	fmt.Println("****************")
-	fmt.Printf("Max number of calories: %d\n",max)
+	fmt.Printf("Max number of calories: %d\n", max)
 }
 
-func printElfTop3(elves []elf){
+func printElfTop3(elves []elf) {
 	fmt.Println("****************")
 	fmt.Println("Top 3")
-	top_three := len(elves)-3
+	top_three := len(elves) - 3
 	total := 0
-	for _,v := range elves[top_three:len(elves)]{
-	fmt.Println(v.total)
-	total += v.total
+	for _, v := range elves[top_three:len(elves)] {
+		fmt.Println(v.total)
+		total += v.total
 	}
-	fmt.Printf("total top 3: %d\n",total)
+	fmt.Printf("total top 3: %d\n", total)
 }
