@@ -7,10 +7,6 @@ import (
 	"bufio"
 	"sort"
 	"strconv"
-
-	//"strconv"
-
-	//"strconv"
 )
 
 var (
@@ -35,9 +31,14 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	//fmt.Println(lines)
-	parseElves(lines)
+	elves := []elf{}
+	elves,err = parseElves(lines)
+	if err != nil{
+		fmt.Println(err)
+	}
 
+	printElfMax(elves)
+	printElfTop3(elves)
 }
 
 func readInputFile(filename string) ([]string,error) {
@@ -69,16 +70,14 @@ func newElf() *elf{
 	return &e
 }
 
-func parseElves(lines []string){
+func parseElves(lines []string)([]elf, error){
 	elves := []elf{}
 	e := newElf()
 	for _,currentLine := range lines{
 		if currentLine == ""{
 			elves = append(elves,*e)
 			e = newElf()
-		}
-
-		if currentLine != "" {
+		} else {
 			n , err := strconv.Atoi(currentLine)
 			if err != nil{
 				fmt.Println(err)
@@ -88,29 +87,34 @@ func parseElves(lines []string){
 			e.total = sumArray(e.food)
 		}
 	}
-	//find elf with max calories
-	max := 0
-	for _, e := range elves{
-		if max < e.total {
-			max = e.total
-		}
-		//fmt.Println(e.total)
-	}
-	fmt.Println("****************")
-	fmt.Printf("Max number of calories: %d\n",max)
-	//find top 3 elves with max calories
-	//sort
+
 	sort.Slice(elves, func( i, j int) bool {
 		return elves[i].total < elves[j].total
 	})
+	return elves, nil
+}
 
+func printElfMax(elves []elf){
+	//find elf with max calories
+	max := 0
+	for _, e := range elves{
+	if max < e.total {
+	max = e.total
+	}
+	//fmt.Println(e.total)
+	}
+	fmt.Println("****************")
+	fmt.Printf("Max number of calories: %d\n",max)
+}
+
+func printElfTop3(elves []elf){
 	fmt.Println("****************")
 	fmt.Println("Top 3")
 	top_three := len(elves)-3
 	total := 0
 	for _,v := range elves[top_three:len(elves)]{
-		fmt.Println(v.total)
-		total += v.total
+	fmt.Println(v.total)
+	total += v.total
 	}
 	fmt.Printf("total top 3: %d\n",total)
 }
