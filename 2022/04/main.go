@@ -99,8 +99,6 @@ func solutionTwo(lines []string) {
 				break
 			}
 		}
-		fmt.Println(bucketA)
 	}
-	fmt.Println("_____________")
-	fmt.Println(total)
+	fmt.Printf("solution two total: %d\n", total)
 }
