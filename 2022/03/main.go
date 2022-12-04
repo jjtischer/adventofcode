@@ -100,7 +100,6 @@ func solutionOne(lines []string){
 	for _, currentLine := range lines {
 		compartment1 := currentLine[0:(len(currentLine)/2)]
 		compartment2 := currentLine[(len(currentLine)/2):len(currentLine)]
-		//fmt.Println("*************"+compartment1+" " + compartment2)
 		foundChar,err := findIdentifier(compartment1,compartment2)
 		if err != nil{
 			errors.New("character not found")
@@ -115,8 +114,7 @@ func solutionTwo(lines []string){
 
 	var groups []string
 	numGroups := int(math.Ceil(float64(len(lines))/3))
-	fmt.Printf("groups %d\n",groups)
-	fmt.Printf("numGroups %d\n",numGroups)
+	fmt.Printf("groups %d numGroups %d\n",groups,numGroups)
 	offset := 0
 	total := 0
 	for i:=0; i < numGroups; i++{
@@ -125,22 +123,13 @@ func solutionTwo(lines []string){
 		fmt.Printf("********** group %d offset %d **********\n", i, offset)
 		lineGroup := lines[offset:(offset+3)]
 		priority := 0
-		switch len(lineGroup){
-		case 1:
-			errors.New("only 1 Elf in group nothing to compare")
-		case 2:
-			foundChar,err := findIdentifier(lineGroup[0], lineGroup[1])
-			if err != nil{
-				errors.New("character not found")
-			}
-			fmt.Printf("found %s\n", foundChar)
-		case 3:
-			commonChars := findCommonChars(lineGroup[0],lineGroup[1])
-			commonChars2 := findCommonChars(lineGroup[1],lineGroup[2])
-			foundChar, _ := findIdentifier(commonChars,commonChars2)
-			fmt.Println(commonChars+" "+commonChars2+" "+foundChar)
-			priority = calcPriority(foundChar)
-		}
+		//assumes input is always groups of 3
+		commonChars := findCommonChars(lineGroup[0],lineGroup[1])
+		commonChars2 := findCommonChars(lineGroup[1],lineGroup[2])
+		foundChar, _ := findIdentifier(commonChars,commonChars2)
+
+		fmt.Println(commonChars+" "+commonChars2+" "+foundChar)
+		priority = calcPriority(foundChar)
 
 		fmt.Println(lineGroup[0])
 		fmt.Println(lineGroup[1])
