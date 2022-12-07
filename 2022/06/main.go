@@ -2,13 +2,9 @@ package main
 
 import (
 	"bufio"
-	//"errors"
 	"flag"
 	"fmt"
-//	"math"
 	"os"
-	"strconv"
-	"strings"
 )
 
 var (
@@ -51,56 +47,65 @@ func readInputFile(filename string) ([]string, error) {
 	return lines, nil
 }
 
+func checkUnique(s string,l int) bool{
+	m := make(map[string]int)
+	for _, v := range s{
+		m[string(v)]+=1
+	}
+	if len(m) == l{
+		return true
+	}else {
+		return false
+	}
+
+}
+
 func solutionOne(lines []string) {
 	total := 0
+	foundMarker := 0
 
 	for _, currentLine := range lines {
-		str := strings.Split(currentLine, ",")
-
-		elf1 := strings.Split(str[0],"-")
-		e1start,_:= strconv.Atoi(elf1[0])
-		e1end,_:= strconv.Atoi(elf1[1])
-
-		elf2 := strings.Split(str[1],"-")
-		e2start,_:= strconv.Atoi(elf2[0])
-		e2end,_:= strconv.Atoi(elf2[1])
-
-		if e1start <=e2start && e1end >= e2end{
-			total+=1
-
-		} else if e2start <=e1start && e2end >= e1end{
-			total+=1
+		fmt.Println(currentLine)
+		markerLen := 4
+		a:=""
+		foundMarker = 0
+		endline:=0
+		for i:=0;i< len(currentLine);i++{
+			endline = i+markerLen
+			if endline <= len(currentLine){
+				a = currentLine[i:endline]
+				if checkUnique(a, markerLen) == true{
+					foundMarker = endline
+					break
+				}
+			}
 		}
 	}
+	fmt.Println(foundMarker)
 	fmt.Printf("solution one total: %d\n", total)
 }
 
 func solutionTwo(lines []string) {
-	total:=0
+	total := 0
+	foundMarker := 0
 
 	for _, currentLine := range lines {
-		bucketA := make(map[string]int)
-		str := strings.Split(currentLine, ",")
-		elf1 := strings.Split(str[0],"-")
-		e1start,_:= strconv.Atoi(elf1[0])
-		e1end,_:= strconv.Atoi(elf1[1])
-		for i:=e1start; i <= e1end; i++{
-			bucketA[strconv.Itoa(i)]+=1
-		}
-
-		elf2 := strings.Split(str[1],"-")
-		e2start,_:= strconv.Atoi(elf2[0])
-		e2end,_:= strconv.Atoi(elf2[1])
-		for i:=e2start; i <= e2end; i++{
-			bucketA[strconv.Itoa(i)]+=1
-		}
-
-		for i:= range bucketA{
-			if bucketA[i] >1{
-				total+=1
-				break
+		fmt.Println(currentLine)
+		markerLen := 14
+		a:=""
+		foundMarker = 0
+		endline:=0
+		for i:=0;i< len(currentLine);i++{
+			endline = i+markerLen
+			if endline <= len(currentLine){
+				a = currentLine[i:endline]
+				if checkUnique(a, markerLen) == true{
+					foundMarker = endline
+					break
+				}
 			}
 		}
 	}
-	fmt.Printf("solution two total: %d\n", total)
+	fmt.Println(foundMarker)
+	fmt.Printf("solution one total: %d\n", total)
 }
